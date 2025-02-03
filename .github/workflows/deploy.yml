@@ -1,0 +1,39 @@
+name: Deploy to GCP VM
+
+on:
+  push:
+    branches:
+      - master  # Change if using another branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Code
+      - name: 🚀 Checkout Code
+        uses: actions/checkout@v2
+
+      # Step 2: SSH into GCP VM and Deploy
+      - name: 🔑 SSH into GCP VM and Deploy
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.GCP_VM_IP }}
+          username: ${{ secrets.GCP_VM_USER }}
+          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          script: |
+            echo "🔄 Pulling latest code..."
+            cd ~/node_docker_gcp
+            git pull origin master  # Update code
+
+            echo "🚀 Building Docker Image..."
+            docker build -t node_docker_gcp .
+
+            echo "⛔ Stopping old container..."
+            docker stop node_container || true
+            docker rm node_container || true
+
+            echo "🚢 Running new container..."
+            docker run -d -p 3000:3000 --name node_container node_docker_gcp
+
+            echo "✅ Deployment complete!"
