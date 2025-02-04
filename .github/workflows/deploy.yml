@@ -52,20 +52,12 @@ jobs:
 
             echo "✅ Deployment complete!"
 
-      # Step 5: Send Slack notification
+      # Step 5: Send Slack Notification
       - name: Send Slack Notification
         if: always()  # Runs regardless of success or failure
         uses: slackapi/slack-github-action@v1
         with:
-          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          status: ${{ job.status }}  # Success or failure status
-          message: |
-            {
-              "text": "Deployment Status: ${{ job.status }}",
-              "attachments": [
-                {
-                  "text": "Commit: ${{ github.sha }}\nBranch: ${{ github.ref }}\nRun URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-                  "color": "${{ job.status == 'success' && 'good' || 'danger' }}"
-                }
-              ]
-            }
+          channel-id: '#your-slack-channel'  # Replace with your Slack channel name
+          slack-message: "🚀 Deployment Status: ${{ job.status }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
