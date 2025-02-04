@@ -60,8 +60,12 @@ jobs:
           slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           status: ${{ job.status }}  # Success or failure status
           message: |
-            Deployment Status: ${{ job.status }}
-            Commit: ${{ github.sha }}
-            Branch: ${{ github.ref }}
-            Job: ${{ job.name }}
-            Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            {
+              "text": "Deployment Status: ${{ job.status }}",
+              "attachments": [
+                {
+                  "text": "Commit: ${{ github.sha }}\nBranch: ${{ github.ref }}\nRun URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+                  "color": "${{ job.status == 'success' && 'good' || 'danger' }}"
+                }
+              ]
+            }
