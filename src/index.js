@@ -21,7 +21,7 @@ let items = [];
 
 // CRUD Routes
 // Create
-app.get('/a', (req, res) => {
+app.get('/', (req, res) => {
   res.send(`Hii, I am Docker Testing NodeJs with Using CI/CD on Google Cloud, Neeraj after env data ${process.env.PORT} ${process.env.isDev}`);
 });
 
@@ -29,7 +29,7 @@ const buildPath = path.join(__dirname, "dist");
 app.use(express.static(buildPath));
 
 // SPA fallback for React routing
-app.get("/", (req, res) => {
+app.get("/dist", (req, res) => {
   res.sendFile(path.join(buildPath, "index.html"));
 });
 
@@ -53,21 +53,8 @@ app.get('/items/:id', (req, res) => {
 });
 
 // Update
-app.put('/items/:id', (req, res) => {
-  const item = items.find(i => i.id === parseInt(req.params.id));
-  if (!item) return res.status(404).json({ message: 'Item not found' });
-  Object.assign(item, req.body);
-  res.json(item);
-});
 
-// Delete
-app.delete('/items/:id', (req, res) => {
-  const index = items.findIndex(i => i.id === parseInt(req.params.id));
-  if (index === -1) return res.status(404).json({ message: 'Item not found' });
-  items.splice(index, 1);
-  res.status(204).send();
-});
-app.listen(PORT, '0.0.0.0', () => {
+const server =app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);
 });
 // Start Server
@@ -75,4 +62,4 @@ app.listen(PORT, '0.0.0.0', () => {
 //   console.log(`Server running on http://localhost:${aPORT}`);
 // });
 
-export default app;
+export {app, server};
