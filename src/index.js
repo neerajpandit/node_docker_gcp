@@ -21,7 +21,7 @@ let items = [];
 
 // CRUD Routes
 // Create
-app.get('*', (req, res) => {
+app.get('/a', (req, res) => {
   res.send(`Hii, I am Docker Testing NodeJs with Using CI/CD on Google Cloud, Neeraj after env data ${process.env.PORT} ${process.env.isDev}`);
 });
 
@@ -29,7 +29,7 @@ const buildPath = path.join(__dirname, "dist");
 app.use(express.static(buildPath));
 
 // SPA fallback for React routing
-app.get("/a", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(path.join(buildPath, "index.html"));
 });
 
