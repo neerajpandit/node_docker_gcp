@@ -14,8 +14,22 @@ jobs:
       - name: 🚀 Checkout Code
         uses: actions/checkout@v2
 
-      # Step 2: SSH into GCP VM and Deploy
+      # Step 2: Set up Node.js environment and install dependencies
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '23.6.1'   # Update to the version you're using
+
+      - name: Install dependencies
+        run: npm install
+
+      # Step 3: Run tests
+      - name: Run Tests
+        run: npm test
+
+      # Step 4: If tests pass, proceed with deployment
       - name: 🔑 SSH into GCP VM and Deploy
+        if: success()  # Only runs if the previous steps are successful
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.GCP_VM_IP }}
