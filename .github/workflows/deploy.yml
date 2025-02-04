@@ -57,7 +57,7 @@ jobs:
         if: always()  # Runs regardless of success or failure
         uses: slackapi/slack-github-action@v1
         with:
-          channel-id: '#your-slack-channel'  # Replace with your Slack channel name
+          channel-id: '#deployment-gcp'  # Replace with your Slack channel name
           slack-message: "🚀 Deployment Status: ${{ job.status }}"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
