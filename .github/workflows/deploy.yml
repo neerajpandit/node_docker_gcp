@@ -51,3 +51,17 @@ jobs:
             docker run -d -p 3000:3000 --name node_container node_docker_gcp
 
             echo "✅ Deployment complete!"
+
+      # Step 5: Send Slack notification
+      - name: Send Slack Notification
+        if: always()  # Runs regardless of success or failure
+        uses: slackapi/slack-github-action@v1
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          status: ${{ job.status }}  # Success or failure status
+          message: |
+            Deployment Status: ${{ job.status }}
+            Commit: ${{ github.sha }}
+            Branch: ${{ github.ref }}
+            Job: ${{ job.name }}
+            Run URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
